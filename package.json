@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "classnames": "^2.5.1",
     "preact": "^10.19.6"
   },
   "devDependencies": {
