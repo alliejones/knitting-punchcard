@@ -14,14 +14,10 @@ export interface State {
 }
 
 export type Action =
-  | { type: "clearEditor" }
   | { type: "loadDesign"; stitches: Stitch[]; columns: number; rows: number }
   | { type: "setStitch"; index: number; value: Stitch }
   | { type: "mouseEvent"; event: "mousedown" | "mouseup" };
 export type Dispatch = PreactDispatch<Action>;
-
-const buildStitches = (columns: number, rows: number): Stitch[] =>
-  Array(columns * rows).fill("-");
 
 export const formatStitchOutput = (stitches: Stitch[], columnCount: number) => {
   const output = [];
@@ -38,17 +34,15 @@ const getObjectUrl = (stitches: Stitch[], columns: number, prevUrl: string) => {
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case "clearEditor": {
-      const stitches = buildStitches(state.columns, state.rows);
+    case "loadDesign": {
+      const { stitches, columns, rows } = action;
       return {
         ...state,
         stitches,
-        objectUrl: getObjectUrl(stitches, state.columns, state.objectUrl),
+        columns,
+        rows,
+        objectUrl: getObjectUrl(stitches, columns, state.objectUrl),
       };
-    }
-    case "loadDesign": {
-      const { stitches, columns, rows } = action;
-      return { ...state, stitches, columns, rows };
     }
     case "setStitch": {
       const { index, value } = action;
@@ -77,15 +71,17 @@ export function App({ initialState }: { initialState: Partial<State> }) {
   const [state, dispatch] = useReducer<State, Action, null>(
     reducer,
     null,
-    () => {
-      const stitches = buildStitches(24, 20);
+    (): State => {
+      const columns = initialState.columns ?? 24;
+      const rows = initialState.rows ?? 20;
+      const stitches = Array(columns * rows).fill("-");
 
       return {
-        columns: 24,
-        rows: 20,
+        columns,
+        rows,
         stitches,
         dragging: false,
-        objectUrl: getObjectUrl(stitches, 24, ""),
+        objectUrl: getObjectUrl(stitches, columns, ""),
         ...initialState,
       };
     }

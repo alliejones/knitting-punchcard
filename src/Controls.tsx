@@ -1,8 +1,10 @@
-import { compressToEncodedURIComponent } from "lz-string";
+import type { ChangeEvent } from "preact/compat";
 import { useCallback } from "preact/hooks";
+import { compressToEncodedURIComponent } from "lz-string";
 import { formatStitchOutput } from "./App";
+
 import type { Dispatch, Stitch } from "./App";
-import { ChangeEvent } from "preact/compat";
+
 interface ControlsProps {
   dispatch: Dispatch;
   rows: number;
@@ -35,10 +37,16 @@ const Controls = ({
   stitches,
   objectUrl,
 }: ControlsProps) => {
-  const clearEditor = useCallback(
-    () => dispatch({ type: "clearEditor" }),
-    [dispatch]
-  );
+  const clearEditor = useCallback(() => {
+    if (confirm("Are you sure you want to clear the design?")) {
+      dispatch({
+        type: "loadDesign",
+        columns,
+        rows,
+        stitches: Array(columns * rows).fill("-"),
+      });
+    }
+  }, [dispatch]);
 
   const loadFile = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
