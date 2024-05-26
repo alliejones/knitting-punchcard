@@ -1,9 +1,10 @@
 import type { ChangeEvent } from "preact/compat";
 import { useCallback } from "preact/hooks";
 import { compressToEncodedURIComponent } from "lz-string";
-import { formatStitchOutput } from "./App";
+import { formatStitchOutput } from "./reducer";
 
-import type { Dispatch, Stitch } from "./App";
+import type { Dispatch } from "./reducer";
+import type { Stitch } from "./reducer";
 
 interface ControlsProps {
   dispatch: Dispatch;

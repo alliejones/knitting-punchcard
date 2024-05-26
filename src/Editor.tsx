@@ -1,7 +1,8 @@
 import classNames from "classnames";
 import classes from "./Editor.module.css";
 
-import type { Dispatch, Stitch } from "./App";
+import type { Dispatch } from "./reducer";
+import type { Stitch } from "./reducer";
 import { useCallback, useState } from "preact/hooks";
 
 const toggleStitch = (stitch: Stitch): Stitch => (stitch === "-" ? "x" : "-");
