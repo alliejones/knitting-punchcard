@@ -73,7 +73,7 @@ const reducer = (state: State, action: Action) => {
   }
 };
 
-export function App() {
+export function App({ initialState }: { initialState: Partial<State> }) {
   const [state, dispatch] = useReducer<State, Action, null>(
     reducer,
     null,
@@ -86,6 +86,7 @@ export function App() {
         stitches,
         dragging: false,
         objectUrl: getObjectUrl(stitches, 24, ""),
+        ...initialState,
       };
     }
   );

@@ -8,7 +8,6 @@ const toggleStitch = (stitch: Stitch): Stitch => (stitch === "-" ? "x" : "-");
 
 const focusStitch = (index: number) => {
   const el = document.getElementById(`stitch${index}`);
-  console.log(el);
   el?.focus();
 };
 

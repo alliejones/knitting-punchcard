@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "lz-string": "^1.5.0",
     "preact": "^10.19.6"
   },
   "devDependencies": {

@@ -1,3 +1,4 @@
+import { compressToEncodedURIComponent } from "lz-string";
 import { useCallback } from "preact/hooks";
 import { formatStitchOutput } from "./App";
 import type { Dispatch, Stitch } from "./App";
@@ -63,6 +64,20 @@ const Controls = ({
     [dispatch]
   );
 
+  const shareUrl = useCallback(() => {
+    const dataString = compressToEncodedURIComponent(
+      JSON.stringify({
+        stitches,
+        columns,
+        rows,
+      })
+    );
+    const url = new URL(window.location.href);
+    url.searchParams.set("data", dataString);
+    window.history.replaceState(null, "", url.toString());
+    navigator.clipboard.writeText(url.toString());
+  }, [stitches, columns, rows]);
+
   return (
     <div>
       <div>
@@ -85,9 +100,12 @@ const Controls = ({
       </div>
       <div>
         <label>
-          Load file
+          Load text file
           <input type="file" onChange={loadFile} />
         </label>
+      </div>
+      <div>
+        <button onClick={shareUrl}>Share</button>
       </div>
     </div>
   );
