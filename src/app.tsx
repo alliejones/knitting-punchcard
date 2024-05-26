@@ -15,6 +15,7 @@ export interface State {
 
 export type Action =
   | { type: "clearEditor" }
+  | { type: "loadDesign"; stitches: Stitch[]; columns: number; rows: number }
   | { type: "setStitch"; index: number; value: Stitch }
   | { type: "mouseEvent"; event: "mousedown" | "mouseup" };
 export type Dispatch = PreactDispatch<Action>;
@@ -44,6 +45,10 @@ const reducer = (state: State, action: Action) => {
         stitches,
         objectUrl: getObjectUrl(stitches, state.columns, state.objectUrl),
       };
+    }
+    case "loadDesign": {
+      const { stitches, columns, rows } = action;
+      return { ...state, stitches, columns, rows };
     }
     case "setStitch": {
       const { index, value } = action;
