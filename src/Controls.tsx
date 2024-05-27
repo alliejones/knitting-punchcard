@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { compressToEncodedURIComponent } from "lz-string";
 import {
   Alert,
@@ -8,7 +8,9 @@ import {
   Divider,
   FileButton,
   Group,
+  NumberInput,
   Stack,
+  Tooltip,
 } from "@mantine/core";
 
 import type { Dispatch, Stitch } from "./reducer";
@@ -93,6 +95,28 @@ const Controls = ({
     navigator.clipboard.writeText(url.toString());
   }, [stitches, columns, rows]);
 
+  const [newColumns, setNewColumns] = useState(columns);
+  const [newRows, setNewRows] = useState(rows);
+
+  useEffect(() => {
+    setNewColumns(columns);
+  }, [columns]);
+
+  useEffect(() => {
+    setNewRows(rows);
+  }, [rows]);
+
+  const updateSize = useCallback(() => {
+    if (columns === newColumns && rows === newRows) return;
+
+    dispatch({
+      type: "loadDesign",
+      columns: newColumns,
+      rows: newRows,
+      stitches: Array(newColumns * newRows).fill("-"),
+    });
+  }, [columns, rows, newColumns, newRows, dispatch]);
+
   const [showAbout, setShowAbout] = useState(true);
   const [showTextOutput, { toggle: toggleTextOutput }] = useDisclosure(false);
 
@@ -109,7 +133,10 @@ const Controls = ({
           <p>
             This is a small visual editor that generates text files compatible
             with{" "}
-            <a href="https://brendaabell.com/knittingtools/pcgenerator/">
+            <a
+              href="https://brendaabell.com/knittingtools/pcgenerator/"
+              target="new"
+            >
               Brenda A. Bell's Punchcard Generator
             </a>{" "}
             for knitting machines.
@@ -124,7 +151,35 @@ const Controls = ({
         </Alert>
       )}
       <Group>
-        <Button onClick={clearEditor}>Clear design</Button>
+        <NumberInput
+          label="Stitches"
+          description="Width of design"
+          onChange={(value) => setNewColumns(+value)}
+          value={newColumns}
+        />
+        <NumberInput
+          label="Rows"
+          description="Height of design"
+          onChange={(value) => setNewRows(+value)}
+          value={newRows}
+        />
+      </Group>
+      <Group justify="space-between">
+        <Button color="red" variant="outline" onClick={clearEditor}>
+          Clear design
+        </Button>
+        <Tooltip
+          withArrow
+          label="Warning! This will erase your design!"
+          color="red"
+        >
+          <Button
+            disabled={columns === newColumns && rows === newRows}
+            onClick={updateSize}
+          >
+            Resize
+          </Button>
+        </Tooltip>
       </Group>
       <Divider />
       <Group>
