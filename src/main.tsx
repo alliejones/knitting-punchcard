@@ -1,4 +1,4 @@
-import { render } from "preact";
+import ReactDOM from "react-dom/client";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { MantineProvider } from "@mantine/core";
 import { App } from "./App.tsx";
@@ -17,9 +17,8 @@ if (initialStateParam) {
   );
 }
 
-render(
+ReactDOM.createRoot(document.getElementById("app")!).render(
   <MantineProvider>
     <App initialState={initialState} />
-  </MantineProvider>,
-  document.getElementById("app")!
+  </MantineProvider>
 );

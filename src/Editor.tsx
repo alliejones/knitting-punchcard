@@ -3,7 +3,7 @@ import classes from "./Editor.module.css";
 
 import type { Dispatch } from "./reducer";
 import type { Stitch } from "./reducer";
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useState } from "react";
 
 const toggleStitch = (stitch: Stitch): Stitch => (stitch === "-" ? "x" : "-");
 
@@ -49,7 +49,7 @@ const Editor = ({
         <div
           id={`stitch${index}`}
           key={`stitch${index}`}
-          tabindex={0}
+          tabIndex={0}
           className={classNames(classes.stitch, {
             [classes.stitchPunched]: stitch === "x",
           })}

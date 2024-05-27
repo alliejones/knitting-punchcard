@@ -1,14 +1,14 @@
-import { useEffect, useReducer } from "preact/hooks";
-import { AppShell, Burger, Center, Flex, Grid, Text } from "@mantine/core";
+import { useEffect, useReducer } from "react";
+import { AppShell, Burger, Center, Grid, Text } from "@mantine/core";
 
 import Controls from "./Controls";
 import Editor from "./Editor";
-import { State, Action, getInitialState } from "./reducer";
+import { type State, getInitialState } from "./reducer";
 import { reducer } from "./reducer";
 import { useDisclosure } from "@mantine/hooks";
 
 export function App({ initialState }: { initialState: Partial<State> }) {
-  const [state, dispatch] = useReducer<State, Action, null>(
+  const [state, dispatch] = useReducer(
     reducer,
     null,
     (): State => getInitialState(initialState)
@@ -50,7 +50,7 @@ export function App({ initialState }: { initialState: Partial<State> }) {
             <Burger
               opened={opened}
               onClick={toggle}
-              ariaLabel="Toggle settings"
+              aria-label="Toggle settings"
             />
           </Grid.Col>
         </Grid>

@@ -1,4 +1,4 @@
-import type { Dispatch as PreactDispatch } from "preact/hooks";
+import type { Dispatch as ReactDispatch } from "react";
 
 export type Stitch = "-" | "x";
 export interface State {
@@ -13,7 +13,7 @@ export type Action =
   | { type: "loadDesign"; stitches: Stitch[]; columns: number; rows: number }
   | { type: "setStitch"; index: number; value: Stitch }
   | { type: "mouseEvent"; event: "mousedown" | "mouseup" };
-export type Dispatch = PreactDispatch<Action>;
+export type Dispatch = ReactDispatch<Action>;
 
 export const formatStitchOutput = (stitches: Stitch[], columnCount: number) => {
   const output = [];
