@@ -1,9 +1,11 @@
 import { useEffect, useReducer } from "preact/hooks";
+import { AppShell, Burger, Center, Flex, Grid, Text } from "@mantine/core";
 
 import Controls from "./Controls";
 import Editor from "./Editor";
 import { State, Action, getInitialState } from "./reducer";
 import { reducer } from "./reducer";
+import { useDisclosure } from "@mantine/hooks";
 
 export function App({ initialState }: { initialState: Partial<State> }) {
   const [state, dispatch] = useReducer<State, Action, null>(
@@ -26,11 +28,41 @@ export function App({ initialState }: { initialState: Partial<State> }) {
     };
   });
 
+  const [opened, { toggle }] = useDisclosure(true);
+
   const { columns, rows, stitches, dragging, objectUrl } = state;
   return (
-    <div>
-      <Editor {...{ columns, rows, stitches, dragging, dispatch }} />
-      <Controls {...{ dispatch, columns, rows, stitches, objectUrl }} />
-    </div>
+    <AppShell
+      p="md"
+      header={{ height: 60 }}
+      aside={{
+        width: { base: 200, md: 300, lg: 400, xl: 500 },
+        breakpoint: "sm",
+        collapsed: { desktop: !opened, mobile: !opened },
+      }}
+    >
+      <AppShell.Header>
+        <Grid p="sm" pl="md">
+          <Grid.Col span="auto">
+            <Text size="lg">Punchcard Text File Generator</Text>
+          </Grid.Col>
+          <Grid.Col span="content">
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              ariaLabel="Toggle settings"
+            />
+          </Grid.Col>
+        </Grid>
+      </AppShell.Header>
+      <AppShell.Main>
+        <Center>
+          <Editor {...{ columns, rows, stitches, dragging, dispatch }} />
+        </Center>
+      </AppShell.Main>
+      <AppShell.Aside p="md">
+        <Controls {...{ dispatch, columns, rows, stitches, objectUrl }} />
+      </AppShell.Aside>
+    </AppShell>
   );
 }
