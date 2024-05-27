@@ -33,8 +33,8 @@ export const getObjectUrl = (
 };
 
 export const getInitialState = (initialState: Partial<State>) => {
-  const columns = initialState.columns ?? 24;
-  const rows = initialState.rows ?? 20;
+  const columns = initialState?.columns ?? 24;
+  const rows = initialState?.rows ?? 20;
   const stitches = Array(columns * rows).fill("-");
 
   return {
