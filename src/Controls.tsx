@@ -109,13 +109,22 @@ const Controls = ({
   const updateSize = useCallback(() => {
     if (columns === newColumns && rows === newRows) return;
 
+    const newStitches = Array(newColumns * newRows).fill("-");
+    for (let row = 0; row < Math.min(rows, newRows); row++) {
+      for (let column = 0; column < Math.min(columns, newColumns); column++) {
+        const newIndex = row * newColumns + column;
+        const oldIndex = row * columns + column;
+        newStitches[newIndex] = stitches[oldIndex];
+      }
+    }
+
     dispatch({
       type: "loadDesign",
       columns: newColumns,
       rows: newRows,
-      stitches: Array(newColumns * newRows).fill("-"),
+      stitches: newStitches,
     });
-  }, [columns, rows, newColumns, newRows, dispatch]);
+  }, [stitches, columns, rows, newColumns, newRows, dispatch]);
 
   const [showAbout, setShowAbout] = useState(true);
   const [showTextOutput, { toggle: toggleTextOutput }] = useDisclosure(false);
@@ -170,7 +179,7 @@ const Controls = ({
         </Button>
         <Tooltip
           withArrow
-          label="Warning! This will erase your design!"
+          label="Warning! Making the canvas smaller will crop your design"
           color="red"
         >
           <Button
